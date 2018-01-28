@@ -13,39 +13,33 @@ class Solution {
             return null;
         }
         
-        
-        int count = 0;
-        ListNode last = head;
         ListNode curr = head;
+        int len =0;
+        ListNode tail = null;
         while(curr != null){
-            last = curr;
+            
+            tail = curr;
             curr = curr.next;
-            count++;
+            len++;
+            
         }
-        k = k % count;// to deal with situtaiosn where k is more than count ex- k = 3 ,count = 2 in this case our net rotation = 1 because after rotation the length we get back the same list
         
         
-        int shiftat = count - k;// the point where shift occurs , sice we are removing k nodes from right and moving to left, the roation occurs at count - k
-        if(count == 1 || k == 0  || shiftat == 0){// when number of nodes is 1 and rotations are zero just return the head,also if shift at is zero it menas even after rotation it will look the same
-            return head;
+        k = k % len; // if k more than len then instead of going a complete cycle we can skip
+        tail.next = head;// form a cycle
+        
+        
+        for(int i=0;i < len - k ;i++ ){// rotate cycle len - k times, move the tail pointer the reamining len - k times
+            
+            
+            tail = tail.next;
+            
         }
-        // System.out.println(shiftat);
         
-        int i =0;
-        ListNode newstart = head;
-        ListNode newend = head;
-        while(i < shiftat){// traverse to the point of shift , the node at the point of shift will be the new head and the element before it will be the new tail. 1,2,3,4,5,null k= 2 point of shift at index 5-2=3 so new head will be 4 and new tail will be the element before it i.e 3 
-            newend = newstart;
-            newstart = newstart.next;
-            i++;
-        }
-        // System.out.println(" newstart " + newstart.val);
-        // System.out.println(" newend " + newend.val);
-        // System.out.println(" last " + last.val);
-        newend.next = last.next;// assign new tail to null
-        last.next = head;// assign old tail to head 
-        head = newstart;//assign new start to head
+        ListNode newhead = tail.next;// the next val afthe the tail is the new head
+        tail.next = null;//break the cycle
         
-        return head;
+        return newhead;
+        
     }
 }
